@@ -4,7 +4,7 @@ llog
 Llog，一个简单实用的日志模块
 
 ## 示例
-
+```
 package main
 
 import (
@@ -29,3 +29,4 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	reader.ReadLine()
 }
+```
