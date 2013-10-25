@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+
+	<Appender>Console</Appender>	<!-- 开启Llog对应的日志适配器 适配器名称可全大写、全小写、只首字母大写 -->
+	<Appender>File</Appender>
+	
+	<Console>
+		<Level>error</Level>		<!-- 设置Llog日志等级 等级可全大写、全小写、只首字母大写或者是对应的数字 -->
+		<ShortFile>True</ShortFile>	<!-- 设置是否打印短文件信息 可填写：True 或者 False ，可全大写、全小写、只首字母大写或者是对应的1或0数字 -->
+	</Console>
+	
+	<File>
+		<Level>Warn</Level>
+		<FileName>test.log</FileName> <!-- 日志文件路径及名称 -->
+		<ShortFile>true</ShortFile>
+	</File>
+
+</Config>
