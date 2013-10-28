@@ -25,7 +25,7 @@ type ConsoleConfig struct {
 type FileConfig struct {
 	Level     string `xml:"Level"`
 	FileName  string `xml:"FileName"`
-	FileSize  int    `xml:"FileSize"`
+	FileSize  int64  `xml:"FileSize"`
 	MaxLine   int    `xml:"MaxLine"`
 	ShortFile bool   `xml:"ShortFile"`
 }

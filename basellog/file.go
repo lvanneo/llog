@@ -10,6 +10,7 @@ import (
 	"github.com/lvanneo/llog/config"
 	"log"
 	"os"
+	"strconv"
 	"sync"
 )
 
@@ -17,9 +18,12 @@ import (
 type FileLog struct {
 	logger    *log.Logger
 	mwfile    *MutexWriter
-	Level     int
+	level     int
 	filename  string
-	ShortFile bool
+	shortFile bool
+	maxsize   int64 //文件最大值
+	nowsize   int64 //文件当前大小
+	check     sync.Mutex
 }
 
 //文件操作结构体
@@ -46,7 +50,7 @@ func init() {
 //lvan_software@foxmail.com
 func NewFileLog() LlogInterface {
 	flog := new(FileLog)
-	flog.Level = LevelALL
+	flog.level = LevelALL
 	flog.filename = ""
 	flog.mwfile = new(MutexWriter)
 	flog.logger = log.New(flog.mwfile, "", log.Ldate|log.Ltime)
@@ -97,19 +101,20 @@ func (this *FileLog) InitLog(configInfo []byte) (level int, err error) {
 	}
 
 	this.filename = conf.FileName
+	this.maxsize = conf.FileSize
 
-	this.ShortFile = conf.ShortFile
-	if this.ShortFile {
+	this.shortFile = conf.ShortFile
+	if this.shortFile {
 		this.logger = log.New(this.mwfile, "", log.Ldate|log.Ltime|log.Lshortfile)
 	} else {
 		this.logger = log.New(this.mwfile, "", log.Ldate|log.Ltime)
 	}
 
-	this.Level, err = CheckLevel(conf.Level)
+	this.level, err = CheckLevel(conf.Level)
 
 	err = this.initFile()
 
-	return this.Level, err
+	return this.level, err
 
 }
 
@@ -121,11 +126,18 @@ func (this *FileLog) InitLog(configInfo []byte) (level int, err error) {
 //李林(LvanNeo)
 //lvan_software@foxmail.com
 func (this *FileLog) WriteLog(level int, msg string) (err error) {
-	if this.Level > level {
+	if this.level > level {
 		return nil
 	}
 
+	msgsize := int64(len(msg))
+	this.nowsize += msgsize
+
 	this.logger.Println(msg)
+
+	if 0 == this.nowsize {
+		this.nowsize += msgsize
+	}
 
 	return nil
 
@@ -151,9 +163,41 @@ func (this *FileLog) initFile() error {
 		return err
 	}
 
+	stat, err := file.Stat()
+	if err != nil {
+		this.nowsize = 0
+	} else {
+		this.nowsize = stat.Size()
+	}
+
 	this.mwfile.SetFile(file)
 
 	return nil
+}
+
+func (this *FileLog) checkLogFile() {
+	if this.nowsize < this.maxsize {
+		return
+	}
+
+	this.check.Lock()
+
+	this.CloseLog()
+
+	for i := 0; ; i++ {
+		newname := this.filename + strconv.Itoa(i)
+		err := os.Rename(this.filename, newname)
+		if err != nil {
+			continue
+		} else {
+			break
+		}
+	}
+
+	this.initFile()
+
+	this.check.Unlock()
+
 }
 
 //关闭日志
@@ -162,5 +206,5 @@ func (this *FileLog) initFile() error {
 //李林(LvanNeo)
 //lvan_software@foxmail.com
 func (this *FileLog) CloseLog() {
-
+	this.mwfile.file.Close()
 }
