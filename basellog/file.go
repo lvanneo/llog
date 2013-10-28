@@ -101,7 +101,7 @@ func (this *FileLog) InitLog(configInfo []byte) (level int, err error) {
 	}
 
 	this.filename = conf.FileName
-	this.maxsize = conf.FileSize
+	this.maxsize = conf.FileSize * 1024 * 1024
 
 	this.shortFile = conf.ShortFile
 	if this.shortFile {
@@ -132,6 +132,8 @@ func (this *FileLog) WriteLog(level int, msg string) (err error) {
 
 	msgsize := int64(len(msg))
 	this.nowsize += msgsize
+
+	this.checkLogFile()
 
 	this.logger.Println(msg)
 
