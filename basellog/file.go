@@ -53,7 +53,7 @@ func NewFileLog() LlogInterface {
 	flog.level = LevelALL
 	flog.filename = ""
 	flog.mwfile = new(MutexWriter)
-	flog.logger = log.New(flog.mwfile, "", log.Ldate|log.Ltime)
+	flog.logger = log.New(flog.mwfile, "\r\n", log.Ldate|log.Ltime)
 	return flog
 }
 
@@ -177,6 +177,11 @@ func (this *FileLog) initFile() error {
 	return nil
 }
 
+//日志文件检查
+//
+//2013-10-28
+//李林(LvanNeo)
+//lvan_software@foxmail.com
 func (this *FileLog) checkLogFile() {
 	if this.nowsize < this.maxsize {
 		return

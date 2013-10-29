@@ -13,7 +13,7 @@
 		<Level>Warn</Level>
 		<FileName>test.log</FileName> <!-- 日志文件路径及名称 -->
 		<ShortFile>true</ShortFile>
-		<FileSize>10</FileSize>			<!-- 单位 M -->
+		<FileSize>10</FileSize>			<!-- 单位 Mb -->
 	</File>
 
 </Config>
