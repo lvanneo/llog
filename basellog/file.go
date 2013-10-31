@@ -53,7 +53,7 @@ func NewFileLog() LlogInterface {
 	flog.level = LevelALL
 	flog.filename = ""
 	flog.mwfile = new(MutexWriter)
-	flog.logger = log.New(flog.mwfile, "\r\n", log.Ldate|log.Ltime)
+	flog.logger = log.New(flog.mwfile, "", log.Ldate|log.Ltime)
 	return flog
 }
 
