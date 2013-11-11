@@ -9,7 +9,6 @@ package config
 import (
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 )
 
 type XmlConfig struct {
@@ -55,7 +54,6 @@ func GetAppender(configInfo []byte) ([]string, error) {
 	jsonconf := new(JsonConfig)
 	err = json.Unmarshal(configInfo, &jsonconf)
 	if err == nil {
-		fmt.Println("Json Appender")
 		return jsonconf.Appender, nil
 	}
 
@@ -80,7 +78,6 @@ func GetConsoleConfig(configInfo []byte) (ConsoleConfig, error) {
 	jsonconf := new(JsonConfig)
 	err = json.Unmarshal(configInfo, &jsonconf)
 	if err == nil {
-		fmt.Println("Json ConsoleInfo")
 		return jsonconf.Console, nil
 	}
 
@@ -105,8 +102,6 @@ func GetFileConfig(configInfo []byte) (FileConfig, error) {
 	jsonconf := new(JsonConfig)
 	err = json.Unmarshal(configInfo, &jsonconf)
 	if err == nil {
-		fmt.Println("Json FileInfo", jsonconf)
-		fmt.Println(string(configInfo))
 		return jsonconf.File, nil
 	}
 
