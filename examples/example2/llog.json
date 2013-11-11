@@ -1,0 +1,16 @@
+{
+    "Appender": [
+        "Console",
+        "File"
+    ],
+    "Console": {
+        "Level": "debug",
+        "ShortFile": "False"	
+    },
+    "File": {		
+        "Level": "debug",
+		"FileName": "./test.log",
+        "ShortFile": "True",
+        "FileSize": 10
+    }
+}
