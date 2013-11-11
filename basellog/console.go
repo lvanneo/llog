@@ -56,12 +56,14 @@ func (this *ConseleLog) InitLog(configInfo []byte) (level int, err error) {
 		return LevelALL, err
 	}
 
-	this.ShortFile = conf.ShortFile
-	if this.ShortFile {
-		this.logger = log.New(os.Stdout, "", log.Ldate|log.Ltime|log.Lshortfile)
-	} else {
-		this.logger = log.New(os.Stdout, "", log.Ldate|log.Ltime)
-	}
+	/*
+		this.ShortFile = conf.ShortFile
+		if this.ShortFile {
+			this.logger = log.New(os.Stdout, "", log.Ldate|log.Ltime|log.Lshortfile)
+		} else {
+			this.logger = log.New(os.Stdout, "", log.Ldate|log.Ltime)
+		}
+	*/
 
 	this.Level, err = CheckLevel(conf.Level)
 

@@ -56,7 +56,7 @@ func init() {
 //李林(LvanNeo)
 //lvan_software@foxmail.com
 func initload() error {
-	paths := [3]string{"./llog.xml", "./conf/llog.xml", "./config/llog.xml"}
+	paths := [6]string{"./llog.xml", "./conf/llog.xml", "./config/llog.xml", "./llog.json", "./conf/llog.json", "./config/llog.json"}
 
 	var err error
 	for _, ph := range paths {

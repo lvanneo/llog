@@ -103,12 +103,14 @@ func (this *FileLog) InitLog(configInfo []byte) (level int, err error) {
 	this.filename = conf.FileName
 	this.maxsize = conf.FileSize * 1024 * 1024
 
-	this.shortFile = conf.ShortFile
-	if this.shortFile {
-		this.logger = log.New(this.mwfile, "", log.Ldate|log.Ltime|log.Lshortfile)
-	} else {
-		this.logger = log.New(this.mwfile, "", log.Ldate|log.Ltime)
-	}
+	/*
+		this.shortFile = conf.ShortFile
+		if this.shortFile {
+			this.logger = log.New(this.mwfile, "", log.Ldate|log.Ltime|log.Lshortfile)
+		} else {
+			this.logger = log.New(this.mwfile, "", log.Ldate|log.Ltime)
+		}
+	*/
 
 	this.level, err = CheckLevel(conf.Level)
 

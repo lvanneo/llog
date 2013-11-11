@@ -7,7 +7,9 @@ package config
 //lvan_software@foxmail.com
 
 import (
+	"encoding/json"
 	"encoding/xml"
+	"fmt"
 )
 
 type XmlConfig struct {
@@ -17,9 +19,15 @@ type XmlConfig struct {
 	Appender    []string      `xml:"Appender"`
 }
 
+type JsonConfig struct {
+	Appender []string
+	Console  ConsoleConfig
+	File     FileConfig
+}
+
 type ConsoleConfig struct {
 	Level     string `xml:"Level"`
-	ShortFile bool   `xml:"ShortFile"`
+	ShortFile string `xml:"ShortFile"`
 }
 
 type FileConfig struct {
@@ -27,7 +35,7 @@ type FileConfig struct {
 	FileName  string `xml:"FileName"`
 	FileSize  int64  `xml:"FileSize"`
 	MaxLine   int    `xml:"MaxLine"`
-	ShortFile bool   `xml:"ShortFile"`
+	ShortFile string `xml:"ShortFile"`
 }
 
 //获取配置信息中的Llog适配器名称
@@ -40,11 +48,18 @@ type FileConfig struct {
 func GetAppender(configInfo []byte) ([]string, error) {
 	conf := new(XmlConfig)
 	err := xml.Unmarshal(configInfo, &conf)
-	if err != nil {
-		return conf.Appender, err
+	if err == nil {
+		return conf.Appender, nil
 	}
 
-	return conf.Appender, nil
+	jsonconf := new(JsonConfig)
+	err = json.Unmarshal(configInfo, &jsonconf)
+	if err == nil {
+		fmt.Println("Json Appender")
+		return jsonconf.Appender, nil
+	}
+
+	return conf.Appender, err
 
 }
 
@@ -58,11 +73,18 @@ func GetAppender(configInfo []byte) ([]string, error) {
 func GetConsoleConfig(configInfo []byte) (ConsoleConfig, error) {
 	conf := new(XmlConfig)
 	err := xml.Unmarshal(configInfo, &conf)
-	if err != nil {
-		return conf.ConsoleInfo, err
+	if err == nil {
+		return conf.ConsoleInfo, nil
 	}
 
-	return conf.ConsoleInfo, nil
+	jsonconf := new(JsonConfig)
+	err = json.Unmarshal(configInfo, &jsonconf)
+	if err == nil {
+		fmt.Println("Json ConsoleInfo")
+		return jsonconf.Console, nil
+	}
+
+	return conf.ConsoleInfo, err
 
 }
 
@@ -76,9 +98,17 @@ func GetConsoleConfig(configInfo []byte) (ConsoleConfig, error) {
 func GetFileConfig(configInfo []byte) (FileConfig, error) {
 	conf := new(XmlConfig)
 	err := xml.Unmarshal(configInfo, &conf)
-	if err != nil {
-		return conf.FileInfo, err
+	if err == nil {
+		return conf.FileInfo, nil
 	}
 
-	return conf.FileInfo, nil
+	jsonconf := new(JsonConfig)
+	err = json.Unmarshal(configInfo, &jsonconf)
+	if err == nil {
+		fmt.Println("Json FileInfo", jsonconf)
+		fmt.Println(string(configInfo))
+		return jsonconf.File, nil
+	}
+
+	return conf.FileInfo, err
 }
