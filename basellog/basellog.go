@@ -130,6 +130,12 @@ func (this *Llogger) SetLlogger(adaptername string, configinfo []byte) error {
 //李林(LvanNeo)
 //lvan_software@foxmail.com
 func (this *Llogger) writeLog(level int, val ...interface{}) error {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("服务端:指令接收异常结束")
+		}
+	}()
+
 	if this.lowestlevel > level {
 		return nil
 	}
@@ -161,6 +167,12 @@ func (this *Llogger) writeLog(level int, val ...interface{}) error {
 //李林(LvanNeo)
 //lvan_software@foxmail.com
 func (this *Llogger) writeLogf(level int, format string, val ...interface{}) error {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("服务端:指令接收异常结束")
+		}
+	}()
+
 	if this.lowestlevel > level {
 		return nil
 	}
